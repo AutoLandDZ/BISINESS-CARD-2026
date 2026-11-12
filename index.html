@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoLand | Digital Business Card</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --cat-yellow: #FFCD00;
+            --carbon-black: #1a1a1a;
+        }
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Tajawal', 'Poppins', sans-serif;
+            background-image: radial-gradient(circle at center, #2a2a2a 0%, #000 100%);
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 205, 0, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        .btn-yellow {
+            background-color: var(--cat-yellow);
+            color: var(--carbon-black);
+            transition: all 0.3s ease;
+        }
+        .btn-yellow:hover {
+            box-shadow: 0 0 15px rgba(255, 205, 0, 0.5);
+            transform: translateY(-2px);
+        }
+        .lang-switch button {
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .lang-switch button.active {
+            opacity: 1;
+            color: var(--cat-yellow);
+            font-weight: bold;
+        }
+        #qrcode img {
+            margin: 0 auto;
+            border: 4px solid var(--cat-yellow);
+            border-radius: 8px;
+            padding: 4px;
+            background-color: white;
+        }
+    </style>
+</head>
+<body class="pb-12">
+    <!-- Language Switcher -->
+    <div class="fixed top-4 right-4 z-50 glass-panel px-4 py-2 rounded-full lang-switch flex gap-3 text-sm" dir="ltr">
+        <button onclick="setLang('en')" id="btn-en">EN</button>
+        <button onclick="setLang('fr')" id="btn-fr">FR</button>
+        <button onclick="setLang('ar')" id="btn-ar" class="active">AR</button>
+    </div>
+
+    <div class="max-w-md mx-auto pt-16 px-4">
+        <!-- Profile Section -->
+        <div class="text-center mb-8">
+            <div class="w-32 h-32 mx-auto rounded-full glass-panel flex items-center justify-center mb-4 overflow-hidden border-2 border-[#FFCD00]">
+                <!-- يمكن استبدال الرابط أدناه برابط شعارك بصيغة PNG -->
+                <img src="https://ui-avatars.com/api/?name=Auto+Land&background=FFCD00&color=1a1a1a&size=128" alt="AutoLand Logo" class="w-full h-full object-cover">
+            </div>
+            <h1 class="text-3xl font-bold text-[#FFCD00] mb-1">AutoLand</h1>
+            <p class="text-gray-400 text-lg mb-2" data-i18n="subtitle">خدمات السيارات وبرمجة المفاتيح</p>
+            <p class="text-sm text-gray-500" data-i18n="location"><i class="fas fa-map-marker-alt text-[#FFCD00] mr-1"></i> برج البحري، الجزائر الشاطئ</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <button onclick="saveVCard()" class="btn-yellow py-3 rounded-xl font-bold flex items-center justify-center gap-2">
+                <i class="fas fa-user-plus"></i> <span data-i18n="save_contact">حفظ جهة الاتصال</span>
+            </button>
+            <button onclick="shareCard()" class="glass-panel py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-gray-800 transition">
+                <i class="fas fa-share-nodes text-[#FFCD00]"></i> <span data-i18n="share">مشاركة</span>
+            </button>
+        </div>
+
+        <!-- Contact Links -->
+        <div class="space-y-4 mb-8">
+            <a href="https://wa.me/213557179206" class="glass-panel p-4 rounded-xl flex items-center gap-4 hover:border-[#FFCD00] transition">
+                <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white text-xl">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div class="flex-1 text-left" dir="ltr">
+                    <h3 class="font-bold text-white text-right" data-i18n="whatsapp">واتساب</h3>
+                    <p class="text-gray-400 text-sm text-right">+213 557 17 92 06</p>
+                </div>
+            </a>
+            <a href="tel:+213781554897" class="glass-panel p-4 rounded-xl flex items-center gap-4 hover:border-[#FFCD00] transition">
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white text-xl">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="flex-1 text-left" dir="ltr">
+                    <h3 class="font-bold text-white text-right" data-i18n="phone">هاتف محمول</h3>
+                    <p class="text-gray-400 text-sm text-right">+213 781 55 48 97</p>
+                </div>
+            </a>
+            <a href="viber://chat?number=%2B213557179206" class="glass-panel p-4 rounded-xl flex items-center gap-4 hover:border-[#FFCD00] transition">
+                <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white text-xl">
+                    <i class="fab fa-viber"></i>
+                </div>
+                <div class="flex-1 text-left" dir="ltr">
+                    <h3 class="font-bold text-white text-right" data-i18n="viber">فايبر</h3>
+                    <p class="text-gray-400 text-sm text-right">+213 557 17 92 06</p>
+                </div>
+            </a>
+            <a href="https://www.facebook.com/?_rdr" target="_blank" class="glass-panel p-4 rounded-xl flex items-center gap-4 hover:border-[#FFCD00] transition">
+                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-bold text-white" data-i18n="facebook">فيسبوك</h3>
+                    <p class="text-gray-400 text-sm" data-i18n="fb_desc">صفحتنا الرسمية</p>
+                </div>
+            </a>
+            <a href="https://maps.app.goo.gl/ddfyv2guRrU4KPHA8?g_st=ac" target="_blank" class="glass-panel p-4 rounded-xl flex items-center gap-4 hover:border-[#FFCD00] transition">
+                <div class="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center text-white text-xl">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-bold text-white" data-i18n="map">الموقع الجغرافي</h3>
+                    <p class="text-gray-400 text-sm" data-i18n="map_desc">الجزائر الشاطئ، برج البحري</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Services Section -->
+        <div class="glass-panel p-6 rounded-2xl mb-8">
+            <h2 class="text-xl font-bold text-[#FFCD00] mb-4 text-center" data-i18n="services_title">خدماتنا</h2>
+            <ul class="space-y-3">
+                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-[#FFCD00]"></i> <span data-i18n="serv1">برمجة ونسخ مفاتيح السيارات</span></li>
+                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-[#FFCD00]"></i> <span data-i18n="serv2">تشخيص أعطال نظام الإيموبلايزر (Immobilizer)</span></li>
+                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-[#FFCD00]"></i> <span data-i18n="serv3">تركيب أنظمة الحماية وقطع التيار ضد السرقة</span></li>
+                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-[#FFCD00]"></i> <span data-i18n="serv4">تعديل وبرمجة إلكترونيات السيارات</span></li>
+            </ul>
+        </div>
+
+        <!-- QR Code Section -->
+        <div class="glass-panel p-6 rounded-2xl text-center mb-8">
+            <h2 class="text-lg font-bold text-white mb-4" data-i18n="qr_title">امسح الرمز للوصول للبطاقة</h2>
+            <div id="qrcode" class="flex justify-center mb-2"></div>
+            <p class="text-xs text-gray-500" data-i18n="qr_desc">يمكنك حفظ الصورة لمشاركتها مع عملائك</p>
+        </div>
+        
+        <p class="text-center text-gray-600 text-xs">© 2026 AutoLand. All Rights Reserved.</p>
+    </div>
+
+    <script>
+        // Translations
+        const translations = {
+            ar: {
+                subtitle: "خدمات السيارات وبرمجة المفاتيح",
+                location: " برج البحري، الجزائر الشاطئ",
+                save_contact: "حفظ جهة الاتصال",
+                share: "مشاركة",
+                whatsapp: "واتساب",
+                phone: "هاتف محمول",
+                viber: "فايبر",
+                facebook: "فيسبوك",
+                fb_desc: "صفحتنا الرسمية",
+                map: "الموقع الجغرافي",
+                map_desc: "الجزائر الشاطئ، برج البحري",
+                services_title: "خدماتنا",
+                serv1: "برمجة ونسخ مفاتيح السيارات",
+                serv2: "تشخيص أعطال نظام الإيموبلايزر (Immobilizer)",
+                serv3: "تركيب أنظمة الحماية وقطع التيار ضد السرقة",
+                serv4: "تعديل وبرمجة إلكترونيات السيارات",
+                qr_title: "امسح الرمز للوصول للبطاقة",
+                qr_desc: "يمكنك حفظ الصورة لمشاركتها مع عملائك",
+                dir: "rtl"
+            },
+            fr: {
+                subtitle: "Services Auto & Programmation de Clés",
+                location: " Bordj El Bahri, Alger Plage",
+                save_contact: "Enregistrer Contact",
+                share: "Partager",
+                whatsapp: "WhatsApp",
+                phone: "Téléphone",
+                viber: "Viber",
+                facebook: "Facebook",
+                fb_desc: "Notre page officielle",
+                map: "Localisation",
+                map_desc: "Alger Plage, Bordj El Bahri",
+                services_title: "Nos Services",
+                serv1: "Programmation et reproduction de clés auto",
+                serv2: "Diagnostic des pannes d'antidémarrage (Immo)",
+                serv3: "Installation de systèmes antivol et coupe-circuit",
+                serv4: "Modification et électronique automobile",
+                qr_title: "Scannez le QR Code pour accéder à la carte",
+                qr_desc: "Vous pouvez enregistrer l'image pour la partager",
+                dir: "ltr"
+            },
+            en: {
+                subtitle: "Auto Services & Key Programming",
+                location: " Bordj El Bahri, Alger Plage",
+                save_contact: "Save Contact",
+                share: "Share",
+                whatsapp: "WhatsApp",
+                phone: "Mobile Phone",
+                viber: "Viber",
+                facebook: "Facebook",
+                fb_desc: "Our Official Page",
+                map: "Location",
+                map_desc: "Alger Plage, Bordj El Bahri",
+                services_title: "Our Services",
+                serv1: "Car key programming & duplication",
+                serv2: "Immobilizer system diagnostics",
+                serv3: "Anti-theft & kill switch system installation",
+                serv4: "Automotive electronics & modification",
+                qr_title: "Scan QR Code for Digital Card",
+                qr_desc: "Save this image to share with your clients",
+                dir: "ltr"
+            }
+        };
+
+        function setLang(lang) {
+            // Update active button
+            document.querySelectorAll('.lang-switch button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+
+            // Update text
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(translations[lang][key]) {
+                    el.innerHTML = el.innerHTML.replace(el.innerText, translations[lang][key]);
+                }
+            });
+
+            // Update direction
+            document.documentElement.dir = translations[lang].dir;
+            document.documentElement.lang = lang;
+            
+            // Adjust text alignment classes for RTL/LTR
+            if(lang === 'ar') {
+                document.querySelectorAll('.text-left').forEach(el => {el.classList.remove('text-left'); el.classList.add('text-right');});
+            } else {
+                document.querySelectorAll('.text-right').forEach(el => {el.classList.remove('text-right'); el.classList.add('text-left');});
+            }
+        }
+
+        // VCF Generation
+        function saveVCard() {
+            const vcard = `BEGIN:VCARD
+VERSION:3.0
+FN:AutoLand
+ORG:AutoLand
+TITLE:Auto Services & Key Programming
+TEL;TYPE=WORK,VOICE:+213557179206
+TEL;TYPE=CELL,VOICE:+213781554897
+URL:https://maps.app.goo.gl/ddfyv2guRrU4KPHA8
+ADR;TYPE=WORK:;;Alger Plage;Bordj El Bahri;Algiers;;Algeria
+END:VCARD`;
+            
+            const blob = new Blob([vcard], { type: 'text/vcard' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'AutoLand-Contact.vcf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Share API
+        function shareCard() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'AutoLand Digital Card',
+                    text: 'تفضل بزيارة بطاقة الأعمال الرقمية الخاصة بـ AutoLand',
+                    url: window.location.href,
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('تم نسخ الرابط! Link copied!');
+            }
+        }
+
+        // Generate QR Code dynamically based on current URL
+        window.onload = function() {
+            let currentUrl = window.location.href;
+            if(currentUrl.startsWith('file://') || currentUrl.startsWith('about:')) currentUrl = "https://your-github-username.github.io/autoland-card/"; 
+            
+            new QRCode(document.getElementById("qrcode"), {
+                text: currentUrl,
+                width: 150,
+                height: 150,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+    </script>
+</body>
+</html>
